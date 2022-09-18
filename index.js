@@ -8,7 +8,7 @@ import { getAll, getOne, create, update, remove, getPeriod } from './controllers
 import { createPeriod, getAllPeriods, isPaid } from './controllers/periodController.js'
 
 mongoose
-	.connect('mongodb+srv://admin:admin314159@boostspacedb.5gedsju.mongodb.net/boostspace?retryWrites=true&w=majority')
+	.connect(process.env.MONGODB_URI)
 	.then(() => console.log('Connected with DB up'))
 	.catch(err => console.log('Connect with DB failed', err))
 
@@ -39,7 +39,7 @@ app.get('/period', checkAuth, getAllPeriods)
 app.post('/period', periodValidation, checkAuth, createPeriod)
 app.post('/ispaid', checkAuth, isPaid)
 
-app.listen(666, err => {
+app.listen(process.env.PORT || 666, err => {
 	if (err) {
 		return console.log('Server faled: ', err)
 	}
