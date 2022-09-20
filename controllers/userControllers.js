@@ -139,7 +139,7 @@ export const reg = async (req, res) => {
 	} catch (err) {
 		res.status(500).json({
 			message: 'Не удалось зарегистрироваться',
-			errors: err
+			errors: err,
 		})
 	}
 }
@@ -166,7 +166,14 @@ export const getAllUsers = async (req, res) => {
 
 		const reserve = users.splice(0, count)
 		reserve.map(el => users.push(el))
-		res.json({ users, data, me, groupCounter: [...groupCounter] })
+
+
+		const sortGroup = [...groupCounter]
+		sortGroup.sort()
+		const nullGroup = sortGroup.shift()
+		sortGroup.push(nullGroup)
+
+		res.json({ users, data, me, groupCounter: sortGroup })
 	} catch (err) {
 		res.status(500).json({
 			message: 'Не удалось загрузить пользователей',
