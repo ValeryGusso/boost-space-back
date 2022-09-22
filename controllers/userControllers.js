@@ -268,8 +268,7 @@ export const updateUser = async (req, res) => {
 		})
 
 		res.json({
-			success: true,
-			newPass,
+			success: true
 		})
 	} catch (err) {
 		res.status(500).json({

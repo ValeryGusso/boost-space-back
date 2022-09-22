@@ -3,9 +3,19 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import { orderValidation, periodValidation, regValidation } from './validations.js'
 import checkAuth from './utils/checkAuth.js'
-import { auth, createInvite, decodeToken, getAllUsers, login, reg, updateKeys, updateUser } from './controllers/userControllers.js'
+import {
+	auth,
+	createInvite,
+	decodeToken,
+	getAllUsers,
+	login,
+	reg,
+	updateKeys,
+	updateUser,
+} from './controllers/userControllers.js'
 import { getAll, getOne, create, update, remove, getPeriod } from './controllers/orderControllers.js'
 import { createPeriod, getAllPeriods, isPaid } from './controllers/periodController.js'
+import WSServer from 'express-ws'
 
 mongoose
 	.connect(process.env.MONGODB_URI)
@@ -15,6 +25,31 @@ mongoose
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// Вебсокет обновление таблицы с ключами
+const ws = WSServer(app)
+const aWss = ws.getWss()
+
+app.ws('/ws', ws => {
+	ws.on('message', msg => {
+		const parsed = JSON.parse(msg)
+		if (parsed.updated) {
+			broadcastUpdates()
+		}
+	})
+
+	ws.op('open', () => {
+		console.log('WS connection UP')
+	})
+
+	ws.on('close', () => {
+		console.log('WS connection DOWN')
+	})
+})
+
+function broadcastUpdates() {
+	aWss.clients.forEach(client => client.send(JSON.stringify({ updated: true })))
+}
 
 // Авторизация
 app.post('/login', login)
