@@ -37,14 +37,6 @@ app.ws('/ws', ws => {
 			broadcastUpdates()
 		}
 	})
-
-	ws.op('open', () => {
-		console.log('WS connection UP')
-	})
-
-	ws.on('close', () => {
-		console.log('WS connection DOWN')
-	})
 })
 
 function broadcastUpdates() {

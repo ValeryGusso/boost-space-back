@@ -55,16 +55,16 @@ export const getPeriod = async (req, res) => {
 			orders.map(el => {
 				if (
 					+`${el.date.getFullYear()}${el.date.getMonth() > 10 ? el.date.getMonth() : '0' + el.date.getMonth()}${
-						el.date.getDate() > 10 ? el.date.getDate() : '0' + el.date.getDate()
+						el.date.getDate() >= 10 ? el.date.getDate() : '0' + el.date.getDate()
 					} ` >=
 						+`${startDate.getFullYear()}${
 							startDate.getMonth() > 10 ? startDate.getMonth() : '0' + startDate.getMonth()
-						}${startDate.getDate() > 10 ? startDate.getDate() : '0' + startDate.getDate()}` &&
+						}${startDate.getDate() >= 10 ? startDate.getDate() : '0' + startDate.getDate()}` &&
 					+`${el.date.getFullYear()}${el.date.getMonth() > 10 ? el.date.getMonth() : '0' + el.date.getMonth()}${
-						el.date.getDate() > 10 ? el.date.getDate() : '0' + el.date.getDate()
+						el.date.getDate() >= 10 ? el.date.getDate() : '0' + el.date.getDate()
 					}` <=
 						+`${endDate.getFullYear()}${endDate.getMonth() > 10 ? endDate.getMonth() : '0' + endDate.getMonth()}${
-							endDate.getDate() > 10 ? endDate.getDate() : '0' + endDate.getDate()
+							endDate.getDate() >= 10 ? endDate.getDate() : '0' + endDate.getDate()
 						}`
 				) {
 					currentPeriod.push(el)
