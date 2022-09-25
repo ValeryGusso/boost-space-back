@@ -40,7 +40,9 @@ app.ws('/ws', ws => {
 })
 
 function broadcastUpdates() {
-	aWss.clients.forEach(client => client.send(JSON.stringify({ updated: true })))
+	aWss.clients.forEach(client => {
+		client.send(JSON.stringify({ updated: true }))
+	})
 }
 
 // Авторизация

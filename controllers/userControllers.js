@@ -167,7 +167,6 @@ export const getAllUsers = async (req, res) => {
 		const reserve = users.splice(0, count)
 		reserve.map(el => users.push(el))
 
-
 		const sortGroup = [...groupCounter]
 		sortGroup.sort()
 		const nullGroup = sortGroup.shift()
@@ -268,7 +267,7 @@ export const updateUser = async (req, res) => {
 		})
 
 		res.json({
-			success: true
+			success: true,
 		})
 	} catch (err) {
 		res.status(500).json({
@@ -309,8 +308,39 @@ export const updateKeys = async (req, res) => {
 			characters: updatedCharacters,
 		})
 
+		// Дублирование функционала поиска всех юзеров
+		const data = await UserModel.find()
+		const me = await UserModel.findById(req.userInfo.id)
+		const users = []
+		const groupCounter = new Set()
+		let count = 0
+
+		data.map(el => {
+			users.push({ id: el._id, name: el.name, group: el.group, role: el.role })
+			if (el.group === 0) {
+				count++
+			}
+		})
+		data.map(el => groupCounter.add(el.group))
+		data.sort((a, b) => (a.role > b.role ? -1 : 1))
+		data.sort((a, b) => (a.group < b.group ? -1 : 1))
+		users.sort((a, b) => (a.role > b.role ? -1 : 1))
+		users.sort((a, b) => (a.group < b.group ? -1 : 1))
+
+		const reserve = users.splice(0, count)
+		reserve.map(el => users.push(el))
+
+		const sortGroup = [...groupCounter]
+		sortGroup.sort()
+		const nullGroup = sortGroup.shift()
+		sortGroup.push(nullGroup)
+
 		res.json({
 			success: true,
+			groupCounter: sortGroup,
+			users,
+			data,
+			me,
 		})
 	} catch (err) {
 		res.status(500).json({
