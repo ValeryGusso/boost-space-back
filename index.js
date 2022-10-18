@@ -16,6 +16,9 @@ import {
 import { getAll, getOne, create, update, remove, getPeriod } from './controllers/orderControllers.js'
 import { createPeriod, getAllPeriods, isPaid } from './controllers/periodController.js'
 import WSServer from 'express-ws'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 mongoose
 	.connect(process.env.MONGODB_URI)
@@ -68,7 +71,7 @@ app.get('/period', checkAuth, getAllPeriods)
 app.post('/period', periodValidation, checkAuth, createPeriod)
 app.post('/ispaid', checkAuth, isPaid)
 
-app.listen(process.env.PORT || 666, err => {
+app.listen(process.env.PORT, err => {
 	if (err) {
 		return console.log('Server faled: ', err)
 	}

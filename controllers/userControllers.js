@@ -2,6 +2,9 @@ import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import UserModel from '../models/user.js'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 export let inviteToken = 'none'
 
@@ -30,7 +33,7 @@ export const login = async (req, res) => {
 				isAdmin: user._doc.isAdmin,
 				avatar: user.avatar,
 			},
-			'tokenKey',
+			process.env.TOKEN_KEY,
 			{
 				expiresIn: '30d',
 			}
@@ -80,7 +83,7 @@ export const reg = async (req, res) => {
 			return res.status(400).json(errors.array())
 		}
 
-		const decoded = jwt.verify(invite, 'regKey')
+		const decoded = jwt.verify(invite, process.env.REG_KEY)
 
 		if (decoded.group >= 0) {
 			const password = req.body.password
@@ -126,7 +129,7 @@ export const reg = async (req, res) => {
 					name: user.name,
 					isAdmin: user.isAdmin,
 				},
-				'tokenKey',
+				process.env.TOKEN_KEY,
 				{
 					expiresIn: '30d',
 				}
@@ -183,7 +186,7 @@ export const getAllUsers = async (req, res) => {
 export const decodeToken = async (req, res) => {
 	try {
 		const token = (req.body.token || '').replace(/Bearer\s?/, '')
-		const decoded = jwt.verify(token, 'tokenKey')
+		const decoded = jwt.verify(token, process.env.TOKEN_KEY)
 
 		res.json({
 			id: decoded.id,
@@ -204,7 +207,7 @@ export const createInvite = async (req, res) => {
 			{
 				group: req.body.group,
 			},
-			'regKey',
+			process.env.REG_KEY,
 			{
 				expiresIn: '5m',
 			}
