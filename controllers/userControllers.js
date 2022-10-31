@@ -94,8 +94,9 @@ export const reg = async (req, res) => {
 				name: req.body.name,
 				passwordHash: passHash,
 				isAdmin: false,
+				active: true,
 				group: decoded.group,
-				role: '',
+				role: 'DPS',
 				avatar: '',
 				characters: {
 					main: {
@@ -156,7 +157,7 @@ export const getAllUsers = async (req, res) => {
 		let count = 0
 
 		data.map(el => {
-			users.push({ id: el._id, name: el.name, group: el.group, role: el.role })
+			users.push({ id: el._id, name: el.name, group: el.group, role: el.role, active: el.active })
 			if (el.group === 0) {
 				count++
 			}
@@ -175,7 +176,7 @@ export const getAllUsers = async (req, res) => {
 		const nullGroup = sortGroup.shift()
 		sortGroup.push(nullGroup)
 
-		res.json({ users, data, me, groupCounter: sortGroup })
+		res.json({ users, data, me, groupCounter: sortGroup, success: true })
 	} catch (err) {
 		res.status(500).json({
 			message: 'Не удалось загрузить пользователей',
@@ -348,6 +349,22 @@ export const updateKeys = async (req, res) => {
 	} catch (err) {
 		res.status(500).json({
 			message: 'Не удалось обновить информацию о ключах',
+		})
+	}
+}
+
+export const updateStatus = async (req, res, next) => {
+	try {
+		const id = req.body.id
+		const group = req.body.group
+		const active = req.body.active
+
+		await UserModel.findByIdAndUpdate(id, { group, active })
+
+		next()
+	} catch (err) {
+		res.status(500).json({
+			message: 'Не удалось обновить статус игрока',
 		})
 	}
 }

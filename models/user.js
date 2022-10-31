@@ -1,49 +1,56 @@
 import mongoose from 'mongoose'
 
-const UserSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required: true,
-		unique: true,
-	},
-	passwordHash: {
-		type: String,
-		required: true,
-	},
-	isAdmin: {
-		type: Boolean,
-		required: true,
-	},
-	group: {
-    type: Number,
-		required: true,
-	},
-  role: String,
-	avatar: String,
-	characters: {
-		main: {
-			class: String,
-			key: String,
-			lvl: String,
+const UserSchema = new mongoose.Schema(
+	{
+		name: {
+			type: String,
+			required: true,
+			unique: true,
 		},
-		first: {
-			class: String,
-			key: String,
-			lvl: String,
+		passwordHash: {
+			type: String,
+			required: true,
 		},
-		second: {
-			class: String,
-			key: String,
-			lvl: String,
+		isAdmin: {
+			type: Boolean,
+			required: true,
 		},
-		third: {
-			class: String,
-			key: String,
-			lvl: String,
+		group: {
+			type: Number,
+			required: true,
+		},
+		active: {
+			type: Boolean,
+			required: true,
+		},
+		role: String,
+		avatar: String,
+		characters: {
+			main: {
+				class: String,
+				key: String,
+				lvl: String,
+			},
+			first: {
+				class: String,
+				key: String,
+				lvl: String,
+			},
+			second: {
+				class: String,
+				key: String,
+				lvl: String,
+			},
+			third: {
+				class: String,
+				key: String,
+				lvl: String,
+			},
 		},
 	},
-}, {
-  timestamps: true
-})
+	{
+		timestamps: true,
+	}
+)
 
 export default mongoose.model('User', UserSchema)

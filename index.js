@@ -11,6 +11,7 @@ import {
 	login,
 	reg,
 	updateKeys,
+	updateStatus,
 	updateUser,
 } from './controllers/userControllers.js'
 import { getAll, getOne, create, update, remove, getPeriod } from './controllers/orderControllers.js'
@@ -55,6 +56,7 @@ app.post('/reg', regValidation, reg)
 app.get('/users', checkAuth, getAllUsers)
 app.post('/user', checkAuth, updateUser)
 app.post('/user/keys', checkAuth, updateKeys)
+app.post('/user/status', checkAuth, updateStatus, getAllUsers)
 app.post('/token', decodeToken)
 app.post('/invite', createInvite)
 
